@@ -1,0 +1,7 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { amountToCents, validateEntry, parseCsv, contributionsCsv, tierFor, totalCents, DEMO_ACCOUNT } from '../lib/domain.ts';
+test('money uses integer cents and rejects invalid amounts',()=>{assert.equal(amountToCents('123.45'),12345);assert.equal(amountToCents('0.01'),1);for(const value of ['-1','0','Infinity','1e3','1.001','NaN','1000000001'])assert.throws(()=>amountToCents(value));});
+test('tier thresholds are exact and derived from recorded dollars',()=>{assert.equal(tierFor(2499999).name,'Member');assert.equal(tierFor(2500000).name,'Bronze');assert.equal(tierFor(10000000).name,'Silver');assert.equal(tierFor(500000000).name,'Platinum');assert.equal(totalCents(DEMO_ACCOUNT.contributions),12845000);});
+test('CSV round trips cents and validates all rows',()=>{const parsed=parseCsv(contributionsCsv(DEMO_ACCOUNT.contributions));assert.equal(parsed.length,7);assert.equal(parsed.reduce((s,e)=>s+e.amountCents,0),12845000);assert.throws(()=>parseCsv('year,category,amount\n2025,Property,100\n2025,Property,200'),/Duplicate/);assert.throws(()=>parseCsv('year,category,amount\n2025,Other,=1+1'));assert.throws(()=>parseCsv('ssn,category,amount\n2025,Other,100'));});
+test('future years, unsupported categories, and unsafe cents are rejected',()=>{for(const value of [{year:2099,category:'Other',amountCents:100},{year:2025,category:'Bogus',amountCents:100},{year:2025,category:'Other',amountCents:0.5}])assert.throws(()=>validateEntry(value));});

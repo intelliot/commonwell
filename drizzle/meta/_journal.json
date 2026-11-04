@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1793764941766,
+      "tag": "0000_acoustic_black_panther",
+      "breakpoints": true
+    }
+  ]
+}
