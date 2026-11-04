@@ -26,8 +26,8 @@ This is a prototype, not a security-certified service. Production operators must
 
 Keep dependencies updated, review Dependabot alerts, and run `npm audit`. A passing scan only covers currently known patterns/advisories; it cannot prove the absence of vulnerabilities.
 
-## Known dependency advisory (2026-11-03)
+## Dependency policy
 
-After updating the runtime, framework, and build dependencies, the remaining known advisory is [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249), a moderate denial-of-service risk in `minimatch <11.0.1`, reached through ESLint and its plugins. It concerns processing hostile glob patterns in development tooling; these packages are not part of the application runtime. Lint only trusted checkout/configuration inputs. The current Next.js lint preset still depends on older minimatch APIs; forcing all consumers to v11 would break compatibility. Track upstream fixes through Dependabot. CI rejects high and critical advisories, while `npm audit` reports all severities.
+The full dependency audit reports zero known vulnerabilities as of 2026-11-03. The previous minimatch advisory was removed by replacing the legacy ESLint/Next lint preset dependency tree with Oxlint. No vulnerable-package allowlist or audit suppression is used. CI runs `npm audit --audit-level=low`, covering development and runtime dependencies, and rejects every reported low, moderate, high, or critical advisory.
 
-The `esbuild` and `fflate` overrides select patched versions for older transitive consumers. Schema generation and builds are checked with these overrides. Reevaluate the overrides when upgrading Drizzle or Vinext.
+The `esbuild` and `fflate` overrides select patched versions for older transitive consumers. Schema generation and builds are checked with these overrides. Reevaluate them when upgrading Drizzle or Vinext. Keep GitHub Actions pinned to immutable commit SHAs and review their Dependabot updates.

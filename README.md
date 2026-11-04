@@ -38,6 +38,7 @@ Local sign-in is a development convenience, not an authentication provider. Keep
 npm test
 npm run typecheck
 npm run lint
+npm run test:lint
 npm run build
 npm audit
 ```
@@ -50,7 +51,7 @@ npm run test:api
 
 The API suite runs only against loopback URLs. Use a disposable local database: it creates synthetic records in years 1901–1903, checks downloads and CRUD, verifies duplicate rejection and import rollback, exercises opt-in recognition, and cleans up after success. It refuses to run if those years are already in use. `COMMONWELL_TEST_URL` can select a different local port.
 
-GitHub Actions runs the unit/security tests, type checking, lint, build, local API checks, and a dependency audit. Dependabot checks npm packages and Actions weekly.
+GitHub Actions runs the unit/security tests, type checking, lint and lint regression checks, build, local API checks, and a full dependency audit that fails on any known vulnerability. Dependabot checks npm packages and Actions weekly.
 
 ## Privacy and authentication
 
